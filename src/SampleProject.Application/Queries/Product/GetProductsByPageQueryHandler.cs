@@ -1,0 +1,45 @@
+using SampleProject.Application.DTOs;
+using SampleProject.Application.Mediator;
+using SampleProject.Domain.Interfaces;
+
+namespace SampleProject.Application.Queries.Product;
+
+public class GetProductsByPageQueryHandler : IRequestHandler<GetProductsByPageQuery, PagedResultDto<ProductDto>>
+{
+    private readonly IProductRepository _repository;
+
+    public GetProductsByPageQueryHandler(IProductRepository repository)
+    {
+        _repository = repository;
+    }
+
+    public async Task<PagedResultDto<ProductDto>> HandleAsync(
+        GetProductsByPageQuery request,
+        CancellationToken cancellationToken = default)
+    {
+        var products = await _repository.GetByPageAsync(
+            request.PageNumber,
+            request.PageSize,
+            cancellationToken);
+
+        var allProducts = await _repository.GetAllAsync(cancellationToken);
+        var totalCount = allProducts.Count();
+        var totalPages = (int)Math.Ceiling(totalCount / (double)request.PageSize);
+
+        var productDtos = products.Select(p => new ProductDto(
+            p.Id,
+            p.ProductId,
+            p.Name,
+            p.Description,
+            p.BasePrice,
+            p.CreatedAt,
+            p.UpdatedAt)).ToList();
+
+        return new PagedResultDto<ProductDto>(
+            productDtos,
+            totalCount,
+            request.PageNumber,
+            request.PageSize,
+            totalPages);
+    }
+}
