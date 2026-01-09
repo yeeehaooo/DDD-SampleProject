@@ -60,7 +60,7 @@ public class CreateOrUpdateInventoryCommandHandler : IRequestHandler<CreateOrUpd
                 sku.SkuCode,
                 storage.Id,
                 storage.Name,
-                inventory.Quantity,
+                inventory.Quantity.Value, // 從 Quantity 提取原始值
                 inventory.UpdatedAt);
         }
         else

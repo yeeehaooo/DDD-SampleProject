@@ -4,15 +4,18 @@ using Microsoft.Extensions.Logging;
 
 namespace SampleProject.Infrastructure.Cache;
 
-public class RedisCacheService : IRedisCacheService
+/// <summary>
+/// Redis 快取存取器實作
+/// </summary>
+public class RedisCacheAccessor : ICacheAccessor
 {
     private readonly IDistributedCache _distributedCache;
-    private readonly ILogger<RedisCacheService> _logger;
+    private readonly ILogger<RedisCacheAccessor> _logger;
     private readonly JsonSerializerOptions _jsonOptions;
 
-    public RedisCacheService(
+    public RedisCacheAccessor(
         IDistributedCache distributedCache,
-        ILogger<RedisCacheService> logger)
+        ILogger<RedisCacheAccessor> logger)
     {
         _distributedCache = distributedCache;
         _logger = logger;

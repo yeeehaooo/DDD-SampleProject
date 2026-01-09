@@ -2,17 +2,17 @@
 
 ## 基本使用
 
-在 Handler 中注入 `IRedisCacheService` 來使用 Redis 快取：
+在 Handler 中注入 `ICacheAccessor` 來使用快取（目前實作為 Redis）：
 
 ```csharp
 public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, ProductDto?>
 {
     private readonly IProductRepository _repository;
-    private readonly IRedisCacheService _cache;
+    private readonly ICacheAccessor _cache;
 
     public GetProductByIdQueryHandler(
         IProductRepository repository,
-        IRedisCacheService cache)
+        ICacheAccessor cache)
     {
         _repository = repository;
         _cache = cache;

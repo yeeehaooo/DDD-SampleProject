@@ -1,4 +1,5 @@
 using SampleProject.Domain.Exceptions;
+using SampleProject.Domain.ValueObjects;
 
 namespace SampleProject.Domain.Entities;
 
@@ -6,9 +7,9 @@ public class Product
 {
     public int Id { get; private set; }
     public Guid ProductId { get; private set; }
-    public string Name { get; private set; } = string.Empty;
+    public ProductName Name { get; private set; } = null!;
     public string Description { get; private set; } = string.Empty;
-    public decimal BasePrice { get; private set; }
+    public Money BasePrice { get; private set; } = null!;
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; }
 
@@ -16,19 +17,38 @@ public class Product
     private Product() { }
 
     // 公開建構函式（業務邏輯）
-    public Product(string name, string description, decimal basePrice)
+    public Product(string name, string description, decimal basePrice, string currency = "TWD")
     {
         // Id 由資料庫自動生成（IDENTITY）
         ProductId = Guid.NewGuid();
+        Name = new ProductName(name);
+        Description = description ?? throw new ArgumentNullException(nameof(description));
+        BasePrice = new Money(basePrice, currency);
+        CreatedAt = DateTime.UtcNow;
+
+        Validate();
+    }
+
+    // 使用 Value Objects 的建構函式
+    public Product(ProductName name, string description, Money basePrice)
+    {
+        ProductId = Guid.NewGuid();
         Name = name ?? throw new ArgumentNullException(nameof(name));
         Description = description ?? throw new ArgumentNullException(nameof(description));
-        BasePrice = basePrice;
+        BasePrice = basePrice ?? throw new ArgumentNullException(nameof(basePrice));
         CreatedAt = DateTime.UtcNow;
 
         Validate();
     }
 
     public void UpdateName(string name)
+    {
+        Name = new ProductName(name);
+        Validate();
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void UpdateName(ProductName name)
     {
         Name = name ?? throw new ArgumentNullException(nameof(name));
         Validate();
@@ -42,27 +62,21 @@ public class Product
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public void UpdateBasePrice(decimal basePrice)
+    public void UpdateBasePrice(decimal basePrice, string currency = "TWD")
     {
-        if (basePrice < 0)
-            throw new DomainException("BasePrice cannot be negative");
+        BasePrice = new Money(basePrice, currency);
+        UpdatedAt = DateTime.UtcNow;
+    }
 
-        BasePrice = basePrice;
+    public void UpdateBasePrice(Money basePrice)
+    {
+        BasePrice = basePrice ?? throw new ArgumentNullException(nameof(basePrice));
         UpdatedAt = DateTime.UtcNow;
     }
 
     private void Validate()
     {
-        if (string.IsNullOrWhiteSpace(Name))
-            throw new DomainException("Product name cannot be empty");
-
-        if (Name.Length > 200)
-            throw new DomainException("Product name cannot exceed 200 characters");
-
-        if (Description.Length > 1000)
-            throw new DomainException("Product description cannot exceed 1000 characters");
-
-        if (BasePrice < 0)
-            throw new DomainException("BasePrice cannot be negative");
+        if (Description.Length > ValidationRules.ProductDescription.MaxLength)
+            throw new DomainException($"Product description cannot exceed {ValidationRules.ProductDescription.MaxLength} characters");
     }
 }

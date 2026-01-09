@@ -22,7 +22,7 @@ public class GetActiveStoragesQueryHandler : IRequestHandler<GetActiveStoragesQu
             s.Id,
             s.StorageId,
             s.Name,
-            s.Address,
+            s.Address?.ToString(), // 從 Address 提取字串表示
             s.IsActive,
             s.CreatedAt,
             s.UpdatedAt)).ToList();

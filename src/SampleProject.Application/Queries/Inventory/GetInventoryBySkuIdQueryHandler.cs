@@ -43,7 +43,7 @@ public class GetInventoryBySkuIdQueryHandler : IRequestHandler<GetInventoryBySku
                     sku.SkuCode,
                     storage.Id,
                     storage.Name,
-                    inventory.Quantity,
+                    inventory.Quantity.Value, // 從 Quantity 提取原始值
                     inventory.UpdatedAt));
             }
         }

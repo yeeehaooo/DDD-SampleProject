@@ -9,7 +9,7 @@ public class SqlConnectionFactory : IDbConnectionFactory
 {
     private readonly string _connectionString;
 
-    public SqlConnectionFactory(IConfiguration configuration, IEncryptionService? encryptionService = null)
+    public SqlConnectionFactory(IConfiguration configuration, IEncryptionProvider? encryptionProvider = null)
     {
         var rawConnectionString = configuration.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("DefaultConnection string is not configured.");
@@ -17,14 +17,14 @@ public class SqlConnectionFactory : IDbConnectionFactory
         // 如果連線字串以 "encrypted:" 開頭，則進行解密
         if (rawConnectionString.StartsWith("encrypted:", StringComparison.OrdinalIgnoreCase))
         {
-            if (encryptionService == null)
+            if (encryptionProvider == null)
             {
                 throw new InvalidOperationException(
-                    "Encrypted connection string detected but IEncryptionService is not registered.");
+                    "Encrypted connection string detected but IEncryptionProvider is not registered.");
             }
 
             var encryptedValue = rawConnectionString.Substring("encrypted:".Length);
-            _connectionString = encryptionService.Decrypt(encryptedValue);
+            _connectionString = encryptionProvider.Decrypt(encryptedValue);
         }
         else
         {

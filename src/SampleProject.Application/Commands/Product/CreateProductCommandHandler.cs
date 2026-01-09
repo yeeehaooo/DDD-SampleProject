@@ -37,9 +37,9 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
         return new ProductDto(
             product.Id,
             product.ProductId,
-            product.Name,
+            product.Name.Value, // 從 ProductName 提取原始值
             product.Description,
-            product.BasePrice,
+            product.BasePrice.Amount, // 從 Money 提取原始值
             product.CreatedAt,
             product.UpdatedAt);
     }

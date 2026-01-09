@@ -87,7 +87,7 @@ public class StorageRepository : IStorageRepository
                 {
                     storage.StorageId,
                     storage.Name,
-                    storage.Address,
+                    Address = storage.Address?.Street ?? (object)DBNull.Value, // 提取 Address 的原始值（可空）
                     storage.IsActive,
                     storage.CreatedAt,
                     storage.UpdatedAt
@@ -124,7 +124,7 @@ public class StorageRepository : IStorageRepository
                 {
                     storage.Id,
                     storage.Name,
-                    storage.Address,
+                    Address = storage.Address?.Street ?? (object)DBNull.Value, // 提取 Address 的原始值（可空）
                     storage.IsActive,
                     storage.UpdatedAt
                 },

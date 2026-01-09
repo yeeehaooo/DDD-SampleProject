@@ -74,7 +74,7 @@ public class InventoryRepository : IInventoryRepository
                 {
                     inventory.SkuId,
                     inventory.StorageId,
-                    inventory.Quantity,
+                    Quantity = inventory.Quantity.Value, // 提取 Quantity 的原始值
                     inventory.CreatedAt,
                     inventory.UpdatedAt
                 },

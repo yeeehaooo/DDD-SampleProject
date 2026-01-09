@@ -55,7 +55,7 @@ public class UpdateStorageCommandHandler : IRequestHandler<UpdateStorageCommand,
             storage.Id,
             storage.StorageId,
             storage.Name,
-            storage.Address,
+            storage.Address?.ToString(), // 從 Address 提取字串表示
             storage.IsActive,
             storage.CreatedAt,
             storage.UpdatedAt);

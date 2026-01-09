@@ -102,7 +102,7 @@ public class SkuRepository : ISkuRepository
                     sku.SkuId,
                     sku.ProductId,
                     sku.SkuCode,
-                    sku.Price,
+                    Price = sku.Price?.Amount, // 提取 Money 的原始值（可空）
                     sku.IsActive,
                     sku.CreatedAt,
                     sku.UpdatedAt
@@ -139,7 +139,7 @@ public class SkuRepository : ISkuRepository
                 {
                     sku.Id,
                     sku.SkuCode,
-                    sku.Price,
+                    Price = sku.Price?.Amount, // 提取 Money 的原始值（可空）
                     sku.IsActive,
                     sku.UpdatedAt
                 },

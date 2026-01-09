@@ -1,9 +1,9 @@
 namespace SampleProject.Infrastructure.Encryption;
 
 /// <summary>
-/// 加密/解密服務介面
+/// 加密/解密提供者介面
 /// </summary>
-public interface IEncryptionService
+public interface IEncryptionProvider
 {
     /// <summary>
     /// 加密字串

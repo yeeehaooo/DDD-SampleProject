@@ -5,14 +5,14 @@ using Microsoft.Extensions.Configuration;
 namespace SampleProject.Infrastructure.Encryption;
 
 /// <summary>
-/// AES256 加密/解密服務實作
+/// AES256 加密/解密提供者實作
 /// </summary>
-public class Aes256EncryptionService : IEncryptionService
+public class Aes256EncryptionProvider : IEncryptionProvider
 {
     private readonly byte[] _key;
     private readonly byte[] _iv;
 
-    public Aes256EncryptionService(IConfiguration configuration)
+    public Aes256EncryptionProvider(IConfiguration configuration)
     {
         var encryptionKey = configuration["Encryption:Key"]
             ?? throw new InvalidOperationException("Encryption:Key is not configured.");

@@ -67,14 +67,14 @@ public class AdjustInventoryCommandHandler : IRequestHandler<AdjustInventoryComm
         await _inventoryRepository.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation("Inventory adjusted for SkuId: {SkuId}, StorageId: {StorageId}, Adjustment: {Adjustment}, New Quantity: {Quantity}",
-            request.SkuId, request.StorageId, request.AdjustmentQuantity, inventory.Quantity);
+            request.SkuId, request.StorageId, request.AdjustmentQuantity, inventory.Quantity.Value);
 
         return new InventoryDto(
             sku.Id,
             sku.SkuCode,
             storage.Id,
             storage.Name,
-            inventory.Quantity,
+            inventory.Quantity.Value, // 從 Quantity 提取原始值
             inventory.UpdatedAt);
     }
 }

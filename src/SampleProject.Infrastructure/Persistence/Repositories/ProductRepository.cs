@@ -1,8 +1,7 @@
-using Dapper;
+﻿using Dapper;
 using SampleProject.Domain.Entities;
 using SampleProject.Domain.Interfaces;
 using SampleProject.Infrastructure.Persistence.DbConnection;
-using System.Data;
 
 namespace SampleProject.Infrastructure.Persistence.Repositories;
 
@@ -98,9 +97,9 @@ public class ProductRepository : IProductRepository
                 new
                 {
                     product.ProductId,
-                    product.Name,
+                    Name = product.Name.Value, // 提取 ProductName 的原始值
                     product.Description,
-                    product.BasePrice,
+                    BasePrice = product.BasePrice.Amount, // 提取 Money 的原始值
                     product.CreatedAt,
                     product.UpdatedAt
                 },
@@ -135,9 +134,9 @@ public class ProductRepository : IProductRepository
                 new
                 {
                     product.Id,
-                    product.Name,
+                    Name = product.Name.Value, // 提取 ProductName 的原始值
                     product.Description,
-                    product.BasePrice,
+                    BasePrice = product.BasePrice.Amount, // 提取 Money 的原始值
                     product.UpdatedAt
                 },
                 cancellationToken: cancellationToken));

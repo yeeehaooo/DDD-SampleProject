@@ -58,7 +58,7 @@ public class GetSkusByProductIdQueryHandler : IRequestHandler<GetSkusByProductId
                 sku.SkuId,
                 sku.ProductId,
                 sku.SkuCode,
-                sku.Price,
+                sku.Price?.Amount, // 從 Money 提取原始值（可空）
                 sku.IsActive,
                 specificationDtos,
                 sku.CreatedAt,

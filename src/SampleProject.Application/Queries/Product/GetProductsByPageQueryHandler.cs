@@ -29,9 +29,9 @@ public class GetProductsByPageQueryHandler : IRequestHandler<GetProductsByPageQu
         var productDtos = products.Select(p => new ProductDto(
             p.Id,
             p.ProductId,
-            p.Name,
+            p.Name.Value, // 從 ProductName 提取原始值
             p.Description,
-            p.BasePrice,
+            p.BasePrice.Amount, // 從 Money 提取原始值
             p.CreatedAt,
             p.UpdatedAt)).ToList();
 
